@@ -3,18 +3,37 @@
   "info": {
     "version": "1.0.0",
     "title": "MLWharf",
-    "description": "MLWharf OpenAPI Specification."
+    "description": "MLWharf OpenAPI Specification.",
+    "x-logo": {
+      "url": "https://raw.githubusercontent.com/ml-wharf/.github/main/assets/ml-wharf-logo.svg",
+      "backgroundColor": "#ffffff",
+      "altText": "MLWharf"
+    }
   },
   "servers": [
     {
       "url": "https://warth.ml/api/v1"
     }
   ],
+  "tags": [
+    {
+      "name": "Meta",
+      "description": "All models must be registered in the MLWharf to train and use them for inference.\n"
+    },
+    {
+      "name": "Train",
+      "description": "Train models or model Variants with different parameters.\nAfter training models are saved in WharfLFS.\n"
+    },
+    {
+      "name": "Language Models",
+      "description": "Language models are models that can generate text.\nThey are trained on a large corpus of text.\nThe most popular language models are GPT-2 and GPT-3.\n"
+    }
+  ],
   "paths": {
     "/meta": {
       "post": {
         "summary": "Add or update model meta",
-        "operationId": "META",
+        "operationId": "POST_META",
         "tags": [
           "Meta"
         ],
@@ -45,6 +64,233 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal sever error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meta/{name}": {
+      "get": {
+        "summary": "Get model meta",
+        "operationId": "GET_META",
+        "tags": [
+          "Meta"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Model unique name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal sever error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meta/search": {
+      "post": {
+        "summary": "Search for models",
+        "operationId": "SEARCH_META",
+        "tags": [
+          "Meta"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Search"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetaSearchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal sever error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/train": {
+      "post": {
+        "summary": "Train a Model or its Variant",
+        "operationId": "POST_TRAIN",
+        "tags": [
+          "Train"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Train"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrainProcess"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal sever error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/train/{id}": {
+      "get": {
+        "summary": "Get training process information",
+        "operationId": "GET_TRAIN",
+        "tags": [
+          "Train"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Training process ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrainProcess"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
                 }
               }
             }
@@ -128,12 +374,37 @@
     "schemas": {
       "Meta": {
         "type": "object",
+        "description": "The meta object contains information about the Model and its Variants.\n",
         "required": [
           "name"
         ],
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Model unique name"
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Main model parameters.\nEach parameter is a key-value pair.\nThe key is the parameter name and the value is the parameter value.\n"
+          },
+          "variants": {
+            "type": "array",
+            "description": "Each model may have Variants.\nIn a nutshell Variants are models trained with different parameters.\n",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Variant unique name"
+                },
+                "parameters": {
+                  "type": "object",
+                  "additionalProperties": {},
+                  "description": "Variant parameters.\nEach parameter is a key-value pair.\nThe key is the parameter name and the value is the parameter value.\n"
+                }
+              }
+            }
           }
         }
       },
@@ -159,28 +430,6 @@
           }
         }
       },
-      "Question": {
-        "type": "object",
-        "required": [
-          "question"
-        ],
-        "properties": {
-          "question": {
-            "type": "string"
-          }
-        }
-      },
-      "Answer": {
-        "type": "object",
-        "required": [
-          "answer"
-        ],
-        "properties": {
-          "answer": {
-            "type": "string"
-          }
-        }
-      },
       "NotFoundError": {
         "type": "object",
         "properties": {
@@ -189,6 +438,179 @@
           },
           "message": {
             "type": "string"
+          }
+        }
+      },
+      "Search": {
+        "type": "object",
+        "description": "Search request",
+        "required": [
+          "query",
+          "limit",
+          "offset"
+        ],
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Limit of results",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "description": "Offset of results",
+            "minimum": 0,
+            "maximum": 1000
+          }
+        }
+      },
+      "MetaSearchResponse": {
+        "type": "object",
+        "description": "Metadata search response",
+        "required": [
+          "results",
+          "total"
+        ],
+        "properties": {
+          "results": {
+            "type": "array",
+            "description": "Search results",
+            "items": {
+              "$ref": "#/components/schemas/Meta"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of results",
+            "minimum": 0
+          }
+        }
+      },
+      "Train": {
+        "type": "object",
+        "description": "Request with training parameters for model or its Variant.\nIf parameters are different to the ones in the model Meta object, they are updated after training.\n",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Model unique name"
+          },
+          "variant": {
+            "type": "string",
+            "description": "Variant unique name"
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Training parameters.\nEach parameter is a key-value pair.\nThe key is the parameter name and the value is the parameter value.\n"
+          }
+        }
+      },
+      "TrainProcess": {
+        "type": "object",
+        "description": "Contains the training status of the model or its Variant.\n",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique ID of the training process.",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "description": "Training status",
+            "enum": [
+              "pending",
+              "running",
+              "done",
+              "error"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Training status message"
+          },
+          "progress": {
+            "type": "number",
+            "format": "float",
+            "description": "Training progress in percent"
+          },
+          "started": {
+            "type": "string",
+            "description": "Training start time",
+            "format": "date-time"
+          },
+          "finished": {
+            "type": "string",
+            "description": "Training finish time",
+            "format": "date-time"
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "Training parameters.\nEach parameter is a key-value pair.\nThe key is the parameter name and the value is the parameter value.\n"
+          },
+          "name": {
+            "type": "string",
+            "description": "Model unique name"
+          },
+          "variant": {
+            "type": "string",
+            "description": "Variant unique name"
+          },
+          "metrics": {
+            "type": "object",
+            "description": "Training metrics",
+            "additionalProperties": {}
+          }
+        }
+      },
+      "Question": {
+        "type": "object",
+        "description": "Question is a standard request for a QA language model.\n",
+        "required": [
+          "question"
+        ],
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "The prompt for the model to answer."
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "description": "The value used to module the next token probabilities.\nMust be strictly greater than 0.\n",
+            "default": 1
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "description": "The cumulative probability for top-p sampling.\nMust be between 0 and 1.\n",
+            "default": 0
+          },
+          "top_k": {
+            "type": "number",
+            "format": "float",
+            "description": "The number of highest probability vocabulary tokens to keep for top-k sampling.\nMust be between 1 and infinity.\n",
+            "default": 1
+          }
+        }
+      },
+      "Answer": {
+        "type": "object",
+        "description": "Answer is a standard response from a QA language model.\n",
+        "required": [
+          "answer"
+        ],
+        "properties": {
+          "answer": {
+            "type": "string",
+            "description": "The answer to the question."
           }
         }
       }

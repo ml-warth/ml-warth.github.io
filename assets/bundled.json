@@ -5,7 +5,7 @@
     "title": "MLWharf",
     "description": "MLWharf OpenAPI Specification.",
     "x-logo": {
-      "url": "assets/ml-wharf-logo.svg",
+      "url": "https://raw.githubusercontent.com/ml-wharf/.github/main/assets/ml-wharf-logo.svg",
       "backgroundColor": "#ffffff",
       "altText": "MLWharf"
     }
@@ -32,7 +32,7 @@
   "paths": {
     "/meta": {
       "post": {
-        "summary": "Add or update model meta",
+        "summary": "Add model meta",
         "operationId": "POST_META",
         "tags": [
           "Meta"
